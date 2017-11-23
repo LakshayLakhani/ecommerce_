@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block head_title %} {% endblock head_title %}
+
+{% block style %}
+
+    <style>
+        .jumbotron{
+            background-color: #D4AF37;
+            box-shadow: 3px 3px 15px #888888;
+        }
+    </style>
+
+{% endblock style %}
+
+{% block jquery %}
+{% endblock jquery %}
+
+{% block jumbotron %}
+<div class="container">
+    <div class="jumbotron">
+        <h1>Hello {{ request.user.username|title }}</h1>
+        <p>This example is a quick exercise to illustrate how the default, static and fixed to top navbar work. It includes the responsive CSS and HTML, so it also adapts to your viewport and device.</p>
+        <p>To see the difference between static and fixed top navbars, just scroll.</p>
+        <p>
+            <a class="btn btn-lg btn-primary" href="../../components/#navbar">View navbar docs &raquo;</a>
+        </p>
+    </div>
+</div>
+
+{% endblock %}
+
+
+{%  block content %}
+
+<div class="row">
+        {% for product in products %}
+            <div class="col-sm-3" >
+                <div class="thumbnail">
+                    {% if product.productimage_set.all %}
+                        {% for item in product.productimage_set.all %}
+                            {% if item.featured %}
+                                <img class="img-responsive" src="{{ item.image.url }}"/>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <img class="img-responsive" src="{% static 'images/spin.svg' %}"/>
+                    {% endif %}
+                    <div class="caption">
+                        <p>{{ product.description|truncatewords:15 }}</p>
+                        <a href="{{product.get_absolute_url}}"><h3>{{ product.title }}</h3></a>
+                        <p><a href="{{ product.get_absolute_url }}" class="btn btn-primary" role="button">View</a>
+                    </div>
+                </div>
+
+                {{ product.id }}
+                <!-- <a href="{% url 'single_product' product.slug %}">{{ product.title }}</a> -->
+                {{ product.price }}
+            </div>
+                {% cycle "" "" "" "</div><br><hr><br><div class='row'>" %}
+        {% endfor %}
+
+</div>
+
+{% endblock %}
